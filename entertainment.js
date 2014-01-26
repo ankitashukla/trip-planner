@@ -6,10 +6,17 @@ var place1;
 function initialize1() {
 
 
+if (document.getElementsByTagName('input')[0].value !== "")
+  {
+    place1 = (document.getElementsByTagName('input'))[0].value;
+  }
+  else
+   {
+    place1 = new google.maps.LatLng(-33.8665433, 151.1956316);
+  }
 
 
-
-if (document.getElementsByTagName('input')[0].value != "")
+if (document.getElementsByTagName('input')[0].value !== "")
   {
     place1 = (document.getElementsByTagName('input'))[0].value;
   }
@@ -54,16 +61,50 @@ geocoder.geocode( { 'address': address }, function(results, status) {
      } else {
          result = "Unable to find address: " + status;
      }
-     storeResult(result);
+     var latlng ={
+       lat : result[lat],
+       lng : result[lng]
+     };
+   });
+}
+
+
+
+
+function callback(results, status) {
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    for (var i = 0; i < results.length; i++) {
+      createMarker(results[i]);
+    }
+  }
+}
+
+function createMarker(place) {
+  var placeLoc = place.geometry.location;
+  var marker = new google.maps.Marker({
+    map: map1,
+    position: place.geometry.location
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow1.setContent(place.name);
+    infowindow1.open(map1, this);
+  });
+}
+
+google.maps.event.addDomListener(window, 'load', initialize1);
     });
 }
 
+
 function storeResult(term){
-  var latlng = new Object();
-  latlng[0] = result[lat];
-  latlng[1] = result[lng];
-  return latlng;
+  var latlng ={
+    lat : term[lat],
+    lng : term[lng]
+  };
+  return this;
 }
+
 
 function callback(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
