@@ -1,78 +1,3 @@
-function initialize()
-{
-	// var mapOptions = {
-	// 	center: new google.maps.LatLng(29.8644, 77.8964),
-	// 	// zoom: 10
-	// };
-	// var map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
-// }
-// google.maps.event.addDomListener(window, 'load', initialize);
-
-// function initialize()
-// {
-	var markers = [];
-	var map = new google.maps.Map(document.getElementById('map-canvas'),
-	{
-		mapTypeId: google.maps.MapTypeId.ROADMAP
-	});
-
-	var defaultBounds = new google.maps.LatLngBounds(
-		new google.maps.LatLng(28.9644, 77.9964),
-		new google.maps.LatLng(29.9644, 78.0964));
-	map.fitBounds(defaultBounds);
-
-	// Create the search box and link it to the UI element.
-	var input = /** @type {HTMLInputElement} */(
-		document.getElementById('pac-input'));
-	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(input);
-
-	var searchBox = new google.maps.places.SearchBox(
-	/** @type {HTMLInputElement} */(input));
-
-	// Listen for the event fired when the user selects an item from the
-	// pick list. Retrieve the matching places for that item.
-	google.maps.event.addListener(searchBox, 'places_changed', function()
-	{
-		var places = searchBox.getPlaces();
-
-		// For each place, get the icon, place name, and location.
-		markers = [];
-		var bounds = new google.maps.LatLngBounds();
-		for (var i = 0, place; place = places[i]; i++)
-		{
-			var image = {
-				url: place.icon,
-				size: new google.maps.Size(71, 71),
-				origin: new google.maps.Point(0, 0),
-				anchor: new google.maps.Point(17, 34),
-				scaledSize: new google.maps.Size(25, 25)
-			};
-
-			// Create a marker for each place.
-			var marker = new google.maps.Marker(
-			{
-				map: map,
-				icon: image,
-				title: place.name,
-				position: place.geometry.location
-			});
-
-			markers.push(marker);
-
-			bounds.extend(place.geometry.location);
-		}
-
-		map.fitBounds(bounds);
-	});
-// }
-
-// google.maps.event.addDomListener(window, 'load', initialize);
-
-
-
-
-
-
 var map, places, infoWindow;
 var markers = [];
 var autocomplete;
@@ -80,11 +5,10 @@ var MARKER_PATH = 'https://maps.gstatic.com/intl/en_us/mapfiles/marker_green';
 var hostnameRegexp = new RegExp('^https?://.+?/');
 
 
-
-// function initialize() {
+function initialize() {
   var myOptions = {
-    zoom: zoom,
-    center: center,
+    zoom: 2,
+    center: new google.maps.LatLng(29.0,79.0),
     mapTypeControl: false,
     panControl: false,
     zoomControl: false,
@@ -98,20 +22,11 @@ var hostnameRegexp = new RegExp('^https?://.+?/');
       });
 
   // Create the autocomplete object and associate it with the UI input control.
-  // Restrict the search to the default country, and to place type "cities".
-  autocomplete = new google.maps.places.Autocomplete(
-      /** @type {HTMLInputElement} */(document.getElementById('autocomplete')),
-      {
-        types: ['(cities)'],
-        componentRestrictions: countryRestrict
-      });
+  autocomplete = new google.maps.places.Autocomplete(document.getElementById('autocomplete'));
   places = new google.maps.places.PlacesService(map);
 
   google.maps.event.addListener(autocomplete, 'place_changed', onPlaceChanged);
 
-  // Add a DOM event listener to react when the user selects a country.
-  google.maps.event.addDomListener(document.getElementById('country'), 'change',
-      setAutocompleteCountry);
 }
 
 // When the user selects a city, get the place details for the city and
@@ -123,9 +38,8 @@ function onPlaceChanged() {
     map.setZoom(15);
     search();
   } else {
-    document.getElementById('autocomplete').placeholder = 'Enter a city';
+    document.getElementById('autocomplete').placeholder = 'Enter your destination';
   }
-
 }
 
 // Search for hotels in the selected city, within the viewport of the map.
@@ -147,7 +61,7 @@ function search() {
         // Use marker animation to drop the icons incrementally on the map.
         markers[i] = new google.maps.Marker({
           position: results[i].geometry.location,
-          animation: google.maps.Animation.DROP,
+          // animation: google.maps.Animation.DROP,
           icon: markerIcon
         });
         // If the user clicks a hotel marker, show the details of that hotel
@@ -170,23 +84,7 @@ function clearMarkers() {
   markers = [];
 }
 
-// The START and END in square brackets define a snippet for our documentation:
-// Set the country restriction based on user input.
-// Also center and zoom the map on the given country.
-function setAutocompleteCountry() {
-  var country = document.getElementById('country').value;
-  if (country == 'all') {
-    autocomplete.setComponentRestrictions([]);
-    map.setCenter(new google.maps.LatLng(15, 0));
-    map.setZoom(2);
-  } else {
-    autocomplete.setComponentRestrictions({ 'country': country });
-    map.setCenter(countries[country].center);
-    map.setZoom(countries[country].zoom);
-  }
-  clearResults();
-  clearMarkers();
-}
+
 
 function dropMarker(i) {
   return function() {
@@ -256,24 +154,7 @@ function buildIWContent(place) {
     document.getElementById('iw-phone-row').style.display = 'none';
   }
 
-  // Assign a five-star rating to the hotel, using a black star ('&#10029;')
-  // to indicate the rating the hotel has earned, and a white star ('&#10025;')
-  // for the rating points not achieved.
-  if (place.rating) {
-    var ratingHtml = '';
-    for (var i = 0; i < 5; i++) {
-      if (place.rating < (i + 0.5)) {
-        ratingHtml += '&#10025;';
-      } else {
-        ratingHtml += '&#10029;';
-      }
-    document.getElementById('iw-rating-row').style.display = '';
-    document.getElementById('iw-rating').innerHTML = ratingHtml;
-    }
-  } else {
-    document.getElementById('iw-rating-row').style.display = 'none';
-  }
-
+  
   // The regexp isolates the first part of the URL (domain plus subdomain)
   // to give a short URL for displaying in the info window.
   if (place.website) {
@@ -289,4 +170,6 @@ function buildIWContent(place) {
     document.getElementById('iw-website-row').style.display = 'none';
   }
 }
-google.maps.event.addDomListener(window, 'load', initialize);
+
+
+
