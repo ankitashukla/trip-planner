@@ -1,41 +1,37 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Map</title>
-		<link rel="stylesheet" type="text/css" href="stylesheet.css">
-		<link rel="stylesheet" type="text/css" href="public/bootstrap/docs/assets/css/bootstrap-responsive.css">
-		<script type="text/javascript"
-		      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrDitnXXzv_aw9dvjj5z4odL4eOr-Wrls&sensor=true">
-		</script>
-		<!-- Autocomplete the names of the places, Search for hotels -->
-		<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
-		<script type="text/javascript" src="script.js"></script>
-	</head>
-	<body>
-		<div class="span2" id="visiting_place">
-			<form class="form" name="" method="post" action="">
-				<input type="text" name="place" id="pac-input" class="controls" placeholder="Enter the destination">
-				<!-- <button type="submit" class="btn btn-default">Let's go!</button> -->
-			</form>
-		</div>
-		<div id="map-canvas" class="container span10"></div>
-		
-
-
-
-
-		  <div id="findhotels">
-      Find hotels in:
-    </div>
+  <head>
+    <title>Place Autocomplete Hotel Search</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+   	<link rel="stylesheet" type="text/css" href="stylesheet.css">
+   	<link rel="stylesheet" type="text/css" href="public/bootstrap/docs/assets/css/bootstrap-responsive.css">
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
+   <script type="text/javascript" src="script.js"></script>
+  <script type="text/javascript" src="entertainment.js"></script>
+   <script type="text/javascript">
+   function start()
+   {
+    // initialize();
+    // initialize1();
+    // getSpots();
+    
+	}
+   </script>
+  
+  </head>
+  <body style="margin:0px; padding:0px;" onload="initialize(); initialize1();">
 
     <div id="locationField">
-      <input id="autocomplete" placeholder="Enter a city" type="text" />
+      <input id="autocomplete" placeholder="Enter your destination" type="text" />
     </div>
 
-   
+    
+<div class="span3"></div>
+    <div id="map-canvas" class="span8"></div>
 
     <div id="listing">
-      <table id="resultsTable">
+      <table id="resultsTable" class="span2">
         <tbody id="results"></tbody>
       </table>
     </div>
@@ -54,16 +50,15 @@
           <td class="iw_attribute_name">Telephone:</td>
           <td id="iw-phone"></td>
         </tr>
-        <tr id="iw-rating-row" class="iw_table_row">
-          <td class="iw_attribute_name">Rating:</td>
-          <td id="iw-rating"></td>
-        </tr>
+        
         <tr id="iw-website-row" class="iw_table_row">
           <td class="iw_attribute_name">Website:</td>
           <td id="iw-website"></td>
         </tr>
       </table>
-		</div>
+    </div>
 
-	</body>
+
+
+  </body>
 </html>
