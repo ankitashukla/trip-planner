@@ -6,14 +6,7 @@ var place1;
 function initialize1() {
 
 
-if (document.getElementsByTagName('input')[0].value !== "")
-  {
-    place1 = (document.getElementsByTagName('input'))[0].value;
-  }
-  else
-   {
-    place1 = new google.maps.LatLng(-33.8665433, 151.1956316);
-  }
+
 
 
 if (document.getElementsByTagName('input')[0].value !== "")
@@ -22,7 +15,8 @@ if (document.getElementsByTagName('input')[0].value !== "")
   }
   else
    {
-    place1 = new google.maps.LatLng(-33.8665433, 151.1956316);
+    return;
+    // place1 = new google.maps.LatLng(-33.8665433, 151.1956316);
   }
 
 
@@ -39,7 +33,6 @@ if (document.getElementsByTagName('input')[0].value !== "")
 
   map1 = new google.maps.Map(document.getElementById('map-canvas'), myOptions);
 
-
   var request = {
     location: getLatLong(place1),
     radius: 500,
@@ -50,61 +43,28 @@ if (document.getElementsByTagName('input')[0].value !== "")
   service.nearbySearch(request, callback);
 }
 
-storeResult = [];
-function getLatLong(address) {
+// storeResult = [];
+function getLatLong(location) {
 var geocoder = new google.maps.Geocoder();
 var result = "";
-geocoder.geocode( { 'address': address }, function(results, status) {
+var lat = location.d, lng = location.e;
+geocoder.geocode( { 'location': location }, function(results, status) {
      if (status == google.maps.GeocoderStatus.OK) {
          result[lat] = results[0].geometry.location.Pa;
          result[lng] = results[0].geometry.location.Qa;
      } else {
          result = "Unable to find address: " + status;
      }
-     var latlng ={
-       lat : result[lat],
-       lng : result[lng]
-     };
-   });
-}
-
-
-
-
-function callback(results, status) {
-  if (status == google.maps.places.PlacesServiceStatus.OK) {
-    for (var i = 0; i < results.length; i++) {
-      createMarker(results[i]);
-    }
-  }
-}
-
-function createMarker(place) {
-  var placeLoc = place.geometry.location;
-  var marker = new google.maps.Marker({
-    map: map1,
-    position: place.geometry.location
-  });
-
-  google.maps.event.addListener(marker, 'click', function() {
-    infowindow1.setContent(place.name);
-    infowindow1.open(map1, this);
-  });
-}
-
-google.maps.event.addDomListener(window, 'load', initialize1);
+     storeResult(result);
     });
 }
 
-
-function storeResult(term){
-  var latlng ={
-    lat : term[lat],
-    lng : term[lng]
-  };
-  return this;
+function storeResult(result){
+  var latlng = new Object();
+  latlng[0] = result[lat];
+  latlng[1] = result[lng];
+  return latlng;
 }
-
 
 function callback(results, status) {
   if (status == google.maps.places.PlacesServiceStatus.OK) {
