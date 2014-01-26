@@ -1,17 +1,16 @@
-html
+html, body,#map-canvas
+
 {
-	height: 100%
-}
-body
-{
-	height: 100%; margin: 0; padding: 0
+	height: 100%;
+	margin: 0px;
+	padding: 0px
 }
 #map-canvas
 {
-	/*position: absolute;
-	top: 25px;*/
-	/*left: 30%;*/
-	height: 70%;
-	/*padding-top: 50px;*/
-	margin-top: 50px;
+	height: 75%;
+}
+}
+#resultsTable
+{
+	height: 50%;
 }
