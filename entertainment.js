@@ -8,13 +8,14 @@ function initialize1() {
 
 
 
-
 if (document.getElementsByTagName('input')[0].value !== "")
   {
+    console.log('if')
     place1 = (document.getElementsByTagName('input'))[0].value;
   }
   else
    {
+    console.log('e')
     return;
     // place1 = new google.maps.LatLng(-33.8665433, 151.1956316);
   }
@@ -34,7 +35,7 @@ if (document.getElementsByTagName('input')[0].value !== "")
   map1 = new google.maps.Map(document.getElementById('map-canvas'), myOptions);
 
   var request = {
-    location: getLatLong(place1),
+    location: new google.maps.LatLng(getLatLong(place1)),
     radius: 500,
     types: ['store']
   };
@@ -47,11 +48,12 @@ if (document.getElementsByTagName('input')[0].value !== "")
 function getLatLong(location) {
 var geocoder = new google.maps.Geocoder();
 var result = "";
-var lat = location.d, lng = location.e;
-geocoder.geocode( { 'location': location }, function(results, status) {
+// var lat = location.d, lng = location.e;
+geocoder.geocode( { 'address': location }, function(results, status) {
+  console.log(results);
      if (status == google.maps.GeocoderStatus.OK) {
-         result[lat] = results[0].geometry.location.Pa;
-         result[lng] = results[0].geometry.location.Qa;
+         result['lat'] = results[0].geometry.location.Pa;
+         result['lng'] = results[0].geometry.location.Qa;
      } else {
          result = "Unable to find address: " + status;
      }
@@ -61,8 +63,8 @@ geocoder.geocode( { 'location': location }, function(results, status) {
 
 function storeResult(result){
   var latlng = new Object();
-  latlng[0] = result[lat];
-  latlng[1] = result[lng];
+  latlng[0] = result['lat'];
+  latlng[1] = result['lng'];
   return latlng;
 }
 

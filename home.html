@@ -12,31 +12,13 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <link rel="stylesheet" type="text/css" href="public/bootstrap/docs/assets/css/bootstrap-responsive.css">
 
-<script type="text/javascript">
-var title = (document.getElementsByTagName('input'))[0].value;
-  $url = 'http://en.wikipedia.org/w/api.php?action=parse&page='+title+'&format=json&prop=text&section=0';
-$ch = curl_init($url);
-curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt ($ch, CURLOPT_USERAGENT, "TestScript"); // required by wikipedia.org server; use YOUR user agent with YOUR contact information. (otherwise your IP might get blocked)
-$c = curl_exec($ch);
-$json = json_decode($c);
-$content = $json->{'parse'}->{'text'}->{'*'}; // get the main text content of the query (it's parsed HTML)
-
-// pattern for first match of a paragraph
-$pattern = '#<p>(.*)</p>#Us'; // http://www.phpbuilder.com/board/showthread.php?t=10352690
-if(preg_match($pattern, $content, $matches))
-{
-    // print $matches[0]; // content of the first paragraph (including wrapping <p> tag)
-    document.getElementById('info').innerHTML = strip_tags($matches[1]); // Content of the first paragraph without the HTML tags.
-}
-</script>
 
 
   </head>
   <body style="margin:0px; padding:0px;" onload="initialize(); initialize1();">
 
     <div id="locationField">
-      <input id="autocomplete" placeholder="Enter your destination" class="form-control" type="text" />
+      <input id="autocomplete" placeholder="Enter your destination" class="form-control" type="text" onchange="initialize1();" />
     </div>
 <div id="info"></div>
     
@@ -56,16 +38,16 @@ if(preg_match($pattern, $content, $matches))
           <td id="iw-url"></td>
         </tr>
         <tr id="iw-address-row" class="iw_table_row">
-          <td class="iw_attribute_name">Address:</td>
+          <td class="iw_attribute_name"></td>
           <td id="iw-address"></td>
         </tr>
         <tr id="iw-phone-row" class="iw_table_row">
-          <td class="iw_attribute_name">Telephone:</td>
+          <td class="iw_attribute_name"></td>
           <td id="iw-phone"></td>
         </tr>
         
         <tr id="iw-website-row" class="iw_table_row">
-          <td class="iw_attribute_name">Website:</td>
+          <td class="iw_attribute_name"></td>
           <td id="iw-website"></td>
         </tr>
       </table>
