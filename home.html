@@ -5,27 +5,40 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
    	<link rel="stylesheet" type="text/css" href="stylesheet.css">
-   	<link rel="stylesheet" type="text/css" href="public/bootstrap/docs/assets/css/bootstrap-responsive.css">
+   	
     <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&libraries=places"></script>
    <script type="text/javascript" src="script.js"></script>
   <script type="text/javascript" src="entertainment.js"></script>
-   <script type="text/javascript">
-   function start()
-   {
-    // initialize();
-    // initialize1();
-    // getSpots();
-    
-	}
-   </script>
-  
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="public/bootstrap/docs/assets/css/bootstrap-responsive.css">
+
+<script type="text/javascript">
+var title = (document.getElementsByTagName('input'))[0].value;
+  $url = 'http://en.wikipedia.org/w/api.php?action=parse&page='+title+'&format=json&prop=text&section=0';
+$ch = curl_init($url);
+curl_setopt ($ch, CURLOPT_RETURNTRANSFER, 1);
+curl_setopt ($ch, CURLOPT_USERAGENT, "TestScript"); // required by wikipedia.org server; use YOUR user agent with YOUR contact information. (otherwise your IP might get blocked)
+$c = curl_exec($ch);
+$json = json_decode($c);
+$content = $json->{'parse'}->{'text'}->{'*'}; // get the main text content of the query (it's parsed HTML)
+
+// pattern for first match of a paragraph
+$pattern = '#<p>(.*)</p>#Us'; // http://www.phpbuilder.com/board/showthread.php?t=10352690
+if(preg_match($pattern, $content, $matches))
+{
+    // print $matches[0]; // content of the first paragraph (including wrapping <p> tag)
+    document.getElementById('info').innerHTML = strip_tags($matches[1]); // Content of the first paragraph without the HTML tags.
+}
+</script>
+
+
   </head>
   <body style="margin:0px; padding:0px;" onload="initialize(); initialize1();">
 
     <div id="locationField">
-      <input id="autocomplete" placeholder="Enter your destination" type="text" />
+      <input id="autocomplete" placeholder="Enter your destination" class="form-control" type="text" />
     </div>
-
+<div id="info"></div>
     
 <div class="span3"></div>
     <div id="map-canvas" class="span8"></div>
@@ -57,8 +70,13 @@
         </tr>
       </table>
     </div>
+<div id="push"></div>
 
-
+<div id="footer">
+      <div class="container">
+        <p class="muted credit"><b>Trip Planner</b> by Ankita Shukla</p>
+      </div>
+    </div>
 
   </body>
 </html>
